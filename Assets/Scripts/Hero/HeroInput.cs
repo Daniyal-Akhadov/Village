@@ -10,6 +10,7 @@ namespace Village.Hero
     {
         private HeroMovement _movement;
         private HeroJumper _jumper;
+        private HeroAttacker _attacker;
         private float _direction;
 
         private const string HorizontalAxis = "Horizontal";
@@ -18,6 +19,7 @@ namespace Village.Hero
         {
             _movement = GetComponent<HeroMovement>();
             _jumper = GetComponent<HeroJumper>();
+            _attacker = GetComponent<HeroAttacker>();
         }
 
         private void Update()
@@ -27,6 +29,11 @@ namespace Village.Hero
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
             {
                 _jumper.TryJump();
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                _attacker.TryAttack();
             }
         }
 

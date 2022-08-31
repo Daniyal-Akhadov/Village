@@ -6,6 +6,7 @@ namespace Village.Hero
     public class HeroMovement : MonoBehaviour
     {
         [SerializeField] private float _speed = 10f;
+        [SerializeField] private Transform _model;
 
         private Rigidbody2D _rigidbody;
         private Animator _animator;
@@ -37,9 +38,9 @@ namespace Village.Hero
             const float DirectionMultiplier = -1f;
 
             _isFacingRight = !_isFacingRight;
-            var scale = transform.localScale;
+            var scale = _model.localScale;
             scale.x *= DirectionMultiplier;
-            transform.localScale = scale;
+            _model.localScale = scale;
         }
     }
 }
