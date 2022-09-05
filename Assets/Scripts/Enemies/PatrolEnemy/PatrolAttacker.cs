@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Village.Hero;
 
@@ -7,22 +6,22 @@ namespace Village.Enemies
     public class PatrolAttacker : MonoBehaviour
     {
         [SerializeField] private int _damage = 1;
-        [SerializeField] private float _reboundForce = 20f;
-        
-        private Rigidbody2D _rigidbody;
 
-        private void Awake()
+        private bool _isAttack;
+
+        private void OnCollisionStay2D(Collision2D col)
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
+            if (_isAttack == false && col.gameObject.TryGetComponent(out HeroHealth hero))
+            {
+                _isAttack = true;
+                hero.ApplyDamage(_damage);
+                Invoke(nameof(StopAttack), 1f);
+            }
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void StopAttack()
         {
-            if (col.gameObject.TryGetComponent(out HeroHealth hero))
-            {
-                hero.ApplyDamage(_damage);
-                // _rigidbody.AddForce();
-            }
+            _isAttack = false;
         }
     }
 }

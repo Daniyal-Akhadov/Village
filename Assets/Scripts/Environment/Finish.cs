@@ -5,6 +5,9 @@ namespace Village.Environment
 {
     public class Finish : MonoBehaviour
     {
+        [SerializeField] private Canvas _levelComplete;
+        [SerializeField] private Canvas _advice;
+
         private LeverArm _leverArm;
         private bool _isActive;
 
@@ -29,12 +32,15 @@ namespace Village.Environment
         {
             if (_isActive == true && col.TryGetComponent(out Hero.HeroInput _))
             {
+                _levelComplete.gameObject.SetActive(true);
                 Reached?.Invoke();
+                Time.timeScale = 0f;
             }
         }
 
         private void OnLeverArmActivated()
         {
+            _advice.gameObject.SetActive(false);
             _isActive = true;
         }
     }

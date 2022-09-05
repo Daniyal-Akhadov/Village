@@ -9,5 +9,6 @@ namespace Village.Hero
         public static readonly int SuperAttack = Animator.StringToHash("SuperAttack");
         public static readonly int Dead = Animator.StringToHash("Dead");
         public static readonly int Hit = Animator.StringToHash("Hit");
+        public static readonly int Defend = Animator.StringToHash("Defend");
     }
 }

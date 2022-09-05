@@ -19,8 +19,9 @@ namespace Village.Enemies
         private Rigidbody2D _rigidbody;
         private PatrolDistance _patrolDistance;
         private Vector2 _targetPoint;
+        private HeroHealth _hero;
         private bool _isChasingPlayer;
-        private Transform _hero;
+        private bool _isMoving;
         private float _waitTimer;
         private float _chasingTimer;
         private float _speed;
@@ -41,11 +42,12 @@ namespace Village.Enemies
         protected override void Awake()
         {
             base.Awake();
-            _hero = FindObjectOfType<HeroInput>().transform;
+            _hero = FindObjectOfType<HeroHealth>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _patrolDistance.StartPoint = transform.position;
             _patrolDistance.FinishPoint = _patrolDistance.StartPoint + Vector2.right * _movementDistance;
             IsFacingRight = true;
+            _isMoving = true;
             DefineTargetPoint();
             _speed = _patrolSpeed;
         }
@@ -60,13 +62,16 @@ namespace Village.Enemies
 
         private void FixedUpdate()
         {
-            if (_isChasingPlayer == true && _hero != null)
+            if (_isChasingPlayer == true && _hero != null && _hero.IsDied == false)
             {
-                Move(_hero.position);
+                var heroPosition = _hero.transform.position;
+                if (_isMoving == true)
+                    Move(heroPosition);
+
                 Chase();
 
-                if (_hero.position.x - transform.position.x < 0 && IsFacingRight == true ||
-                    _hero.position.x - transform.position.x > 0 && IsFacingRight == false)
+                if (heroPosition.x - transform.position.x < 0 && IsFacingRight == true ||
+                    heroPosition.x - transform.position.x > 0 && IsFacingRight == false)
                 {
                     Flip();
                 }
@@ -81,9 +86,25 @@ namespace Village.Enemies
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out Weapon weapon))
+            if (col.TryGetComponent(out Weapon _))
             {
                 StartChasing();
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D col)
+        {
+            if (col.gameObject.TryGetComponent(out HeroInput _))
+            {
+                _isMoving = false;
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D other)
+        {
+            if (other.gameObject.TryGetComponent(out HeroInput _))
+            {
+                _isMoving = true;
             }
         }
 

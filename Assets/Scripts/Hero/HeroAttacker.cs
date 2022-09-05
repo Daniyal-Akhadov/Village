@@ -6,6 +6,7 @@ namespace Village.Hero
     {
         [SerializeField] private AnimationClip _baseAttackAnimation;
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private AudioSource _attackSound;
 
         private Animator _animator;
         private bool _isAttack;
@@ -20,10 +21,12 @@ namespace Village.Hero
             if (_isAttack == true)
                 return;
 
+            print("Attack");
+            _attackSound.Play();
             _animator.SetTrigger(HeroAnimations.SimpleAttack);
             _isAttack = true;
             _weapon.Activate();
-            Invoke(nameof(CompleteAttack), _baseAttackAnimation.length - 0.04f);
+            Invoke(nameof(CompleteAttack), _baseAttackAnimation.length - 0.035f);
         }
 
         private void CompleteAttack()

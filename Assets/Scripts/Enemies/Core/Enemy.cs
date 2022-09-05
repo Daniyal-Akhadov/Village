@@ -22,6 +22,7 @@ namespace Village.Enemies
             _health -= value;
             _animator.SetTrigger(EnemyAnimations.Hit);
             SetSlider();
+            print("I get damage");
 
             if (_health <= 0)
             {
